@@ -11,7 +11,6 @@ class CompetitorInstance():
         self.engine=engine
         self.t_val_code = (9,10,11,12)
         self.team_code = (15,14,13,12)
-        self.endcode = (10,15,13)
         # gameParameters: A dictionary containing a variety of game parameters
         self.gameParameters = gameParameters
         self.players = self.gameParameters['numPlayers']
