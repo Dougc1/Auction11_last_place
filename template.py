@@ -145,11 +145,11 @@ class CompetitorInstance():
 
     def onAuctionEnd(self):
         # Now is the time to report team members, or do any cleanup.
-        self.engine.print(self.bids_diff)
+        """ self.engine.print(self.bids_diff)
         self.engine.print(self.own_team_list)
         self.engine.print(self.non_npc_list)
         self.engine.print(self.true_value_players)
-        self.engine.print([self.true_value])
+        self.engine.print([self.true_value]) """
         
         self.engine.reportTeams(self.own_team_list,self.non_npc_list,self.true_value_players)
 
