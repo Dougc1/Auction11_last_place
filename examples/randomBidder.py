@@ -15,8 +15,8 @@ class CompetitorInstance():
         pass
 
     def onMyTurn(self,lastBid):
-        if self.engine.random.randint(0,100)<20:
-            self.engine.makeBid(lastBid+11)
+        if self.engine.random.randint(0,100)<50:
+            self.engine.makeBid(lastBid+111)
         pass
 
     def onAuctionEnd(self):
