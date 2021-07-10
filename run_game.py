@@ -4,9 +4,9 @@ from gameEngine import GameEngine, NPCRandomBot
 import importlib
 
 botsToRun = {
-    "examples.randomBidder":4,
-    "examples.randomAccuser":1,
-    "NPC": 4
+    "bot_V1":1,
+    "template":2,
+    "NPC": 3
 }
 
 engine = GameEngine()
