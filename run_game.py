@@ -5,8 +5,8 @@ import importlib
 
 botsToRun = {
     "bot_V1":1,
-    "template":2,
-    "NPC": 3
+    "template":1,
+    "NPC": 1
 }
 
 engine = GameEngine()
