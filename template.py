@@ -1,5 +1,6 @@
 from random import random
-
+import math
+import statistics
 
 class CompetitorInstance():
     def __init__(self):
@@ -143,15 +144,51 @@ class CompetitorInstance():
         pass
 
     def onAuctionEnd(self):
+        self.randomness = []
         # Now is the time to report team members, or do any cleanup.
-        """ self.engine.print(self.bids_diff)
-        self.engine.print(self.own_team_list)
-        self.engine.print(self.non_npc_list)
-        self.engine.print(self.true_value_players)
-        self.engine.print([self.true_value]) """
-        
-        self.engine.reportTeams(self.own_team_list,self.non_npc_list,self.true_value_players)
+        #self.engine.print(self.bids_diff)
+        # go through each bots bids which stores the difference from their current to previous bid
+        # calculate the mean
+        # standard dev = sqrt(sum(x-mean)^2/n-1)
+        for l in self.bids_diff:
+            for x in range(len(l)):
+                l[x] -= 16
 
-        
+        # runsTest function
+        for bot in self.bids_diff:
+            med = statistics.median(bot)
+            self.randomness.append(self.runsTest(bot,med))
+        #self.engine.print(self.own_team_list)
+        #self.engine.print(self.non_npc_list)
+        #self.engine.print(self.true_value_players)
+        #self.engine.print([self.true_value])
+        #self.engine.print(self.randomness)
+       # self.engine.reportTeams(self.own_team_list,self.non_npc_list,self.true_value_players)
 
+    # Check randomness 
+    def runsTest(l, l_median):
+        runs, n1, n2 = 0, 0, 0
+        
+        # Checking for start of new run
+        for i in range(len(l)):
+            
+            # no. of runs
+            if (l[i] >= l_median and l[i-1] < l_median) or \
+                    (l[i] < l_median and l[i-1] >= l_median):
+                runs += 1  
+            
+            # no. of positive values
+            if(l[i]) >= l_median:
+                n1 += 1   
+            
+            # no. of negative values
+            else:
+                n2 += 1   
+    
+        runs_exp = ((2*n1*n2)/(n1+n2))+1
+        stan_dev = math.sqrt((2*n1*n2*(2*n1*n2-n1-n2))/ \
+                        (((n1+n2)**2)*(n1+n2-1)))
+    
+        z = (runs-runs_exp)/stan_dev
+        return z
         pass
