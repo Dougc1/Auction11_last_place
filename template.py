@@ -1,6 +1,4 @@
 from random import random
-import math
-import statistics
 
 class CompetitorInstance():
     def __init__(self):
@@ -16,9 +14,7 @@ class CompetitorInstance():
         self.gameParameters = gameParameters
         self.players = self.gameParameters['numPlayers']
         
-        
-
-
+    
     def onAuctionStart(self, index, trueValue):
         # index is the current player's index, that usually stays put from game to game
         # trueValue is -1 if this bot doesn't know the true value 
@@ -164,17 +160,20 @@ class CompetitorInstance():
 
         # runsTest function
         for bot in self.bids_diff:
-            med = statistics.median(bot)
+            bot.sort()
+            middle_value = len(bot)//2
+            med = bot[middle_value]
             self.randomness.append(self.runsTest(bot,med))
+        
         #self.engine.print(self.own_team_list)
         #self.engine.print(self.non_npc_list)
         #self.engine.print(self.true_value_players)
         #self.engine.print([self.true_value])
-        #self.engine.print(self.randomness)
+        self.engine.print(self.randomness)
        # self.engine.reportTeams(self.own_team_list,self.non_npc_list,self.true_value_players)
 
     # Check randomness 
-    def runsTest(l, l_median):
+    def runsTest(self, l, l_median):
         runs, n1, n2 = 0, 0, 0
         
         # Checking for start of new run
@@ -194,9 +193,8 @@ class CompetitorInstance():
                 n2 += 1   
     
         runs_exp = ((2*n1*n2)/(n1+n2))+1
-        stan_dev = math.sqrt((2*n1*n2*(2*n1*n2-n1-n2))/ \
+        stan_dev = self.engine.math.sqrt((2*n1*n2*(2*n1*n2-n1-n2))/ \
                         (((n1+n2)**2)*(n1+n2-1)))
     
         z = (runs-runs_exp)/stan_dev
         return z
-        pass
