@@ -13,6 +13,7 @@ class CompetitorInstance():
         # gameParameters: A dictionary containing a variety of game parameters
         self.gameParameters = gameParameters
         self.players = self.gameParameters['numPlayers']
+        self.ph2 = gameParameters["phase"] == "phase_2"
         
     
     def onAuctionStart(self, index, trueValue):
@@ -26,7 +27,7 @@ class CompetitorInstance():
 
         self.who_am_i = -1
         self.latest_bidder = -1
-
+        
         #tracks bid difference of players in list of list
         #bid difference difference in bid between a bid made a player
         #and the last/highest bid made
@@ -49,6 +50,8 @@ class CompetitorInstance():
         self.own_team_list = []
         self.non_npc_list = []
         self.true_value_players = []
+        self.fake_value_players = []
+        self.team_t_player = []
         self.t_player = -1
         
 
@@ -73,27 +76,31 @@ class CompetitorInstance():
             elif tuple(self.bids_diff[whoMadeBid]) == self.t_val_code:
                 self.own_team_list.append(whoMadeBid)
                 self.non_npc_list.append(whoMadeBid)
-                self.true_value_players.append(whoMadeBid)
-                self.t_player = whoMadeBid
+                if self.ph2 == False:
+                    self.true_value_players.append(whoMadeBid)
+                    self.t_player = whoMadeBid
+                else:
+                    self.team_t_player.append(whoMadeBid)
 
         #updates latest bidder
         self.latest_bidder = whoMadeBid
         pass
 
     #creates a bid simulating a npc's random bid
-    def random_bid(self,lastBid):
+    def random_bid_phase1(self,lastBid):
         b = lastBid+(8*(1+2*self.engine.random.random()))
         self.engine.makeBid(self.engine.math.floor(b)) 
         pass
 
     #bidding when no bot knows the true value
-    def standard_bid(self,lastBid):
+    """ def standard_bid(self,lastBid):
         if (lastBid < self.gameParameters["meanTrueValue"]):
-                self.random_bid(lastBid)
-        pass
+                self.random_bid_phase1(lastBid)
+        pass """
 
     #bidding for a bot which doesn't know the 
     def normal_player_bid(self,lastBid):
+
         if len(self.bids_diff[self.t_player]) == 8:
             self.true_value = 0
             for i in range(4):
@@ -101,9 +108,9 @@ class CompetitorInstance():
 
         if len(self.bids_diff[self.t_player]) > 7:
             if (lastBid + 8 < self.true_value):
-                self.random_bid(lastBid)
+                self.random_bid_phase1(lastBid)
         else:
-            self.random_bid(lastBid)
+            self.random_bid_phase1(lastBid)
         pass
 
 
@@ -117,7 +124,7 @@ class CompetitorInstance():
             self.code_pos += 1
 
         if len(self.bids_diff[self.t_player]) == 8:
-            self.random_bid(lastBid)
+            self.random_bid_phase1(lastBid)
         
         
 
@@ -131,15 +138,12 @@ class CompetitorInstance():
 
         if self.round < 4:
             self.engine.makeBid(lastBid+self.code[self.round])
-        else:
-            if self.t_player == -1:
-                self.standard_bid(lastBid)
-                
+
+        else:            
+            if self.who_am_i == self.t_player:
+                self.t_player_bid(lastBid)
             else:
-                if self.who_am_i == self.t_player:
-                    self.t_player_bid(lastBid)
-                else:
-                    self.normal_player_bid(lastBid) 
+                self.normal_player_bid(lastBid) 
 
         if self.round == 0:
             self.who_am_i = self.latest_bidder
@@ -173,7 +177,7 @@ class CompetitorInstance():
        # self.engine.reportTeams(self.own_team_list,self.non_npc_list,self.true_value_players)
 
     # Check randomness 
-    def runsTest(self, l, l_median):
+    def runsTest(self,l, l_median):
         runs, n1, n2 = 0, 0, 0
         
         # Checking for start of new run
