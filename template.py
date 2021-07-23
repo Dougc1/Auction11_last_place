@@ -105,6 +105,7 @@ class CompetitorInstance():
         self.engine.makeBid(self.engine.math.floor(b)) 
         pass
 
+    #math stuff npcs use to bid for phase 2
     def linterp(self,x,y,x1):
         for i,xn in enumerate(x):
             if x1<xn:
