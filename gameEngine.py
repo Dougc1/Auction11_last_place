@@ -90,7 +90,7 @@ class GameEngine():
             "penaltyMax": meanTrueValue+stdDevValue*3,
             "auctionsCount":5
         }
-        if random.random()<0.3:
+        if random.random()<0.5:
             self.gameParameters["phase"]="phase_2"
         else:
             self.gameParameters["phase"]="phase_1"
