@@ -302,7 +302,8 @@ class CompetitorInstance():
         # go through each bots bids which stores the difference from their current to previous bid
         # calculate the mean
         # standard dev = sqrt(sum(x-mean)^2/n-1)
-        """ for l in self.bids_diff:
+        # negative
+        for l in self.bids_diff:
             for x in range(len(l)):
                 l[x] -= 16
 
@@ -312,7 +313,7 @@ class CompetitorInstance():
                 bot.sort()
                 middle_value = int(len(bot)/2)
                 med = bot[middle_value]
-                self.randomness.append(self.runsTest(bot,med)) """
+                self.randomness.append(self.runsTest(bot,med))
         
         #self.engine.print(self.own_team_list)
         #self.engine.print(str(self.bids/self.round))
@@ -320,7 +321,7 @@ class CompetitorInstance():
         if self.who_am_i in self.fake_value_players or self.who_am_i == self.t_player:
             self.engine.print("The current phase is: "+ self.gameParameters["phase"])
         #self.engine.print([self.true_value])
-        #self.engine.print(self.randomness)
+        self.engine.print(self.randomness)
 
         upper = 0.35
         lower = 0.05
