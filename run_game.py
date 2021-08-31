@@ -4,7 +4,7 @@ import importlib
 # List your bots here
 botsToRun = {
     "bot_V1":3,
-    "examples.randomAccuser":3,
+    "bot_v2":3,
     "template":3,
     "NPC": 3
 }
