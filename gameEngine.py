@@ -90,7 +90,7 @@ class GameEngine():
             "penaltyMax": meanTrueValue+stdDevValue*3,
             "auctionsCount":5
         }
-        if random.random()<0.5:
+        if random.random()<0.0:
             self.gameParameters["phase"]="phase_2"
         else:
             self.gameParameters["phase"]="phase_1"
@@ -425,8 +425,13 @@ class NPCRandomBot():
         self.minp = gameParameters["minimumBid"]
         self.ph2 = gameParameters["phase"] == "phase_2"
         self.engine = engine
+        self.games = 0
+        self.total = 0
 
     def onAuctionStart(self, index, trueValue):
+        self.bidsmade = 0
+        self.rounds = 0
+        self.index = index
         pass
 
     def onBidMade(self, whoMadeBid, howMuch):
@@ -439,11 +444,21 @@ class NPCRandomBot():
         if lastBid>self.mean*3/4:
             pr=2/50
         if random.random() < pr:
+            self.bidsmade += 1
             if not self.ph2:
                 self.engine.makeBid(math.floor(
                     lastBid+(self.minp*(1+2*random.random()))))
             else:
                 self.engine.makeBid(lastBid + int((1+7 * linterp(NPCnormalY2,NPCnormalX, random.random())) * self.minp))
+        self.rounds += 1
+
 
     def onAuctionEnd(self):
+        #print("NPC bids Made: " + str(self.bidsmade))
+        #print("rounds: " + str(self.rounds))
+        #print("percentage: " + str(self.bidsmade/self.rounds))
+        #self.games += 1
+        #self.total += self.bidsmade/self.rounds
+        self.engine.print("NPC index: " + str(self.index))
+        #print("average percentage: " + str(self.total/self.games))
         pass
